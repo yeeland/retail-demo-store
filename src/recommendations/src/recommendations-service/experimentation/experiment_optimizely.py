@@ -22,10 +22,23 @@ class OptimizelyFeatureTest(experiment.Experiment):
                                    product_list=item_list,
                                    num_results=num_results)
 
-        config = optimizely_sdk.config_manager.get_config()
+        config = optimizely_sdk.get_optimizely_config()
 
-        for item in items:
+        assert self.feature in config.features_map, f'Feature {self.feature} is not set up properly on Optimizely'
+        feature = config.features_map[self.feature]
+
+        assert feature.experiments_map.keys() > 0, "No feature tests have been set up for this feature"
+        experiment_key = list(feature.experiments_map.keys())[0]
+
+        variation_key = optimizely_sdk.get_variation(experiment_key, user_id)
+
+        for rank, item in enumerate(items, 1):
+            correlation_id = self._create_correlation_id(user_id, variation_key, rank)
             item['experiment'] = {'type': 'optimizely',
                                   'feature': self.feature,
-                                  'revision_number': config.get_revision()}
+                                  'name': experiment_key,
+                                  'experiment_key': experiment_key,
+                                  'variationIndex': variation_key,
+                                  'revision_number': config.revision,
+                                  'correlationId': correlation_id}
         return items
