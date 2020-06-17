@@ -26,5 +26,6 @@ class OptimizelyFeatureTest(experiment.Experiment):
 
         for item in items:
             item['experiment'] = {'type': 'optimizely',
+                                  'feature': self.feature,
                                   'revision_number': config.get_revision()}
         return items
