@@ -154,13 +154,7 @@ export const AnalyticsHandler = {
             const expectedRevisionNumber = optimizelyClientInstance.configObj.revision;
             if (this.isOptimizelyDatafileSynced(expectedRevisionNumber)) {
                 const userId = user.id.toString();
-                const variation = optimizelyClientInstance.decisionService.getVariationForFeature(
-                  experiment.feature,
-                  userId,
-                );
-                optimizelyClientInstance.activate(variation.experiment.key, userId);
-            } else {
-                // TODO: How do we force the javascript SDK to update itself?
+                optimizelyClientInstance.activate(experiment.experiment_key, userId);
             }
         }
     },
@@ -225,8 +219,6 @@ export const AnalyticsHandler = {
             if (this.isOptimizelyDatafileSynced(expectedRevisionNumber)) {
                 const userId = user.id.toString();
                 optimizelyClientInstance.track('ProductAdded', userId);
-            } else {
-                // TODO: How do we force the javascript SDK to update itself?
             }
         }
     },
@@ -358,8 +350,6 @@ export const AnalyticsHandler = {
             if (this.isOptimizelyDatafileSynced(expectedRevisionNumber)) {
                 const userId = user.id.toString();
                 optimizelyClientInstance.track('ProductAdded', userId);
-            } else {
-                // TODO: How do we force the javascript SDK to update itself?
             }
         }
     },
